@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Chores and pocket money, tracked on the kid's phone. Parent-controlled.">
+<meta name="theme-color" content="#F1F3F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131716" media="(prefers-color-scheme: dark)">
+<!-- makes Add to Home Screen open fullscreen without browser chrome -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Punch Card">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231B2021'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23F1F3F0'/%3E%3C/svg%3E">
+</head>
+<body>
+<title>Punch Card — Chores &amp; Earnings</title>
+
+<style>
+/* ---- tokens: light is the base, dark redefines only tokens ---- */
+:root{
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --r:14px;
+  /* --- NEBULA: light ("daylight nebula" — lavender paper) --- */
+  --paper:#F3F0FA;
+  --card:#FFFFFF;
+  --sunk:#EBE5F7;
+  --ink:#191031;
+  --slate:#5B4F76;
+  --hair:#DBD3EC;
+  --brass:#7E5507;        /* starlight gold — money */
+  --brass-soft:#F8EACB;
+  --mint:#0C6A5D;         /* ionized oxygen teal — done */
+  --mint-soft:#D5EFEA;
+  --rose:#B03328;         /* hydrogen-alpha coral — late */
+  --rose-soft:#FADFDB;
+  --shadow:rgba(30,16,60,.10);
+  --stub:#FCFAFF;
+  --neb-a:rgba(124,58,190,.13);
+  --neb-b:rgba(199,60,160,.10);
+  --neb-card:rgba(139,92,246,.09);
+  --note-bg:#ECE3FB;
+  --note-ink:#54329C;
+  --punch:#F6F2FD;
+  --star:transparent;
+  --star-op:0;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0B0716;
+    --card:#171029;
+    --sunk:#110B20;
+    --ink:#EEE9F8;
+    --slate:#ADA0CA;
+    --hair:#2E2450;
+    --brass:#F2BB4E;
+    --brass-soft:#3B2C11;
+    --mint:#41DCC2;
+    --mint-soft:#0F332F;
+    --rose:#FF8878;
+    --rose-soft:#3B1D1C;
+    --shadow:rgba(0,0,0,.55);
+    --stub:#1C1430;
+    --neb-a:rgba(124,58,237,.32);
+    --neb-b:rgba(214,51,168,.22);
+    --neb-card:rgba(160,80,230,.20);
+    --note-bg:#241842;
+    --note-ink:#C9AEF7;
+    --punch:#1F1638;
+    --star:rgba(255,255,255,.85);
+    --star-op:.85;
+  }
+}
+:root[data-theme="light"]{
+  --paper:#F3F0FA; --card:#FFFFFF; --sunk:#EBE5F7; --ink:#191031; --slate:#5B4F76;
+  --hair:#DBD3EC; --brass:#7E5507; --brass-soft:#F8EACB; --mint:#0C6A5D; --mint-soft:#D5EFEA;
+  --rose:#B03328; --rose-soft:#FADFDB; --shadow:rgba(30,16,60,.10); --stub:#FCFAFF;
+  --neb-a:rgba(124,58,190,.13); --neb-b:rgba(199,60,160,.10); --neb-card:rgba(139,92,246,.09);
+  --note-bg:#ECE3FB; --note-ink:#54329C; --punch:#F6F2FD; --star:transparent; --star-op:0;
+}
+:root[data-theme="dark"]{
+  --paper:#0B0716; --card:#171029; --sunk:#110B20; --ink:#EEE9F8; --slate:#ADA0CA;
+  --hair:#2E2450; --brass:#F2BB4E; --brass-soft:#3B2C11; --mint:#41DCC2; --mint-soft:#0F332F;
+  --rose:#FF8878; --rose-soft:#3B1D1C; --shadow:rgba(0,0,0,.55); --stub:#1C1430;
+  --neb-a:rgba(124,58,237,.32); --neb-b:rgba(214,51,168,.22); --neb-card:rgba(160,80,230,.20);
+  --note-bg:#241842; --note-ink:#C9AEF7; --punch:#1F1638; --star:rgba(255,255,255,.85); --star-op:.85;
+}
+
+*{box-sizing:border-box}
+/* every component below sets its own display, which would otherwise
+   out-specify the hidden attribute — keep hidden authoritative */
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(1100px 620px at 12% -8%, var(--neb-a), transparent 62%),
+    radial-gradient(900px 520px at 92% 6%, var(--neb-b), transparent 60%),
+    var(--paper);
+  background-attachment:fixed;
+}
+/* starfield — dark theme only, sits behind everything */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  opacity:var(--star-op);
+  background-image:
+    radial-gradient(1px 1px at 24px 18px, var(--star), transparent 100%),
+    radial-gradient(1px 1px at 96px 72px, var(--star), transparent 100%),
+    radial-gradient(1.6px 1.6px at 158px 34px, var(--star), transparent 100%),
+    radial-gradient(1px 1px at 47px 128px, var(--star), transparent 100%),
+    radial-gradient(1.3px 1.3px at 183px 152px, var(--star), transparent 100%),
+    radial-gradient(1px 1px at 132px 108px, var(--star), transparent 100%),
+    radial-gradient(1.4px 1.4px at 68px 41px, var(--star), transparent 100%),
+    radial-gradient(1px 1px at 205px 88px, var(--star), transparent 100%),
+    radial-gradient(1px 1px at 12px 96px, var(--star), transparent 100%),
+    radial-gradient(1.2px 1.2px at 244px 176px, var(--star), transparent 100%),
+    radial-gradient(1px 1px at 111px 204px, var(--star), transparent 100%);
+  background-size:213px 187px, 213px 187px, 213px 187px, 289px 241px, 289px 241px, 289px 241px,
+                  151px 133px, 151px 133px, 337px 279px, 337px 279px, 337px 279px;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2.5px solid var(--brass);outline-offset:2px;border-radius:6px}
+
+.mono{font-family:var(--mono)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--slate);
+}
+
+/* ---- shell ---- */
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  display:flex;align-items:center;gap:10px;padding:14px 18px 10px;
+  position:sticky;top:0;z-index:20;
+  /* translucent so the nebula shows through instead of a flat block */
+  background:color-mix(in srgb, var(--paper) 78%, transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .2s;
+}
+.topbar.stuck{border-bottom-color:var(--hair)}
+.brandmark{
+  width:26px;height:26px;flex:none;border-radius:5px;background:var(--ink);
+  display:grid;place-items:center;
+}
+.brandmark span{
+  display:block;width:9px;height:9px;border-radius:50%;
+  background:var(--paper);box-shadow:0 0 0 2.5px var(--paper) inset;
+}
+.brandname{font-family:var(--mono);font-weight:700;letter-spacing:.1em;font-size:12px;text-transform:uppercase}
+.topbar .grow{flex:1}
+.iconbtn{
+  border:1px solid var(--hair);background:var(--card);border-radius:9px;
+  padding:7px 11px;font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--slate);
+}
+.iconbtn:hover{border-color:var(--brass);color:var(--brass)}
+
+main{flex:1;padding:0 18px 40px}
+.view[hidden]{display:none}
+
+/* ---- kid: takings ---- */
+.takings{
+  background:
+    radial-gradient(130% 150% at 88% -10%, var(--neb-card), transparent 68%),
+    var(--card);
+  border:1px solid var(--hair);border-radius:var(--r);
+  padding:20px 20px 18px;box-shadow:0 1px 2px var(--shadow);margin-top:6px;
+}
+.takings-top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.amount{
+  font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;
+  font-size:clamp(40px,13vw,54px);line-height:.95;letter-spacing:-.03em;color:var(--brass);
+}
+.amount .cur{font-size:.55em;vertical-align:.32em;margin-right:1px}
+.pending{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;
+  color:var(--slate);text-align:right;max-width:11ch;line-height:1.35;
+}
+
+/* punch strip = the streak */
+.strip{margin-top:18px;padding-top:16px;border-top:1px dashed var(--hair)}
+.strip-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+.strip-head b{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink)}
+.punches{display:flex;gap:6px}
+.punch{
+  flex:1;aspect-ratio:1/1.35;border-radius:5px;background:var(--punch);
+  border:1px solid var(--hair);display:grid;place-items:center;position:relative;
+}
+.punch i{
+  display:block;width:34%;aspect-ratio:1;border-radius:50%;
+  background:transparent;border:1.5px dashed var(--hair);
+}
+.punch.hit{background:var(--brass-soft);border-color:transparent}
+.punch.hit i{background:var(--brass);border:none;box-shadow:0 0 0 3px var(--brass-soft)}
+.punch.today{border-color:var(--brass);border-style:solid}
+.punch small{
+  position:absolute;bottom:-16px;left:0;right:0;text-align:center;
+  font-family:var(--mono);font-size:9px;color:var(--slate);letter-spacing:.04em;
+}
+.punches{margin-bottom:20px}
+
+/* ---- note from parent ---- */
+.note{
+  margin-top:14px;background:var(--note-bg);border-radius:var(--r);
+  padding:13px 15px;display:flex;gap:11px;align-items:flex-start;
+}
+.note .eyebrow{color:var(--note-ink)}
+.note p{margin:3px 0 0;font-size:15px}
+
+/* ---- section head ---- */
+.sechead{
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  margin:28px 0 12px;
+}
+.sechead h2{margin:0;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.sechead .count{font-family:var(--mono);font-size:11px;color:var(--slate);letter-spacing:.06em}
+
+/* ---- ticket stub ---- */
+.stubs{display:flex;flex-direction:column;gap:9px;list-style:none;margin:0;padding:0}
+.stub{
+  position:relative;display:flex;align-items:center;gap:13px;
+  background:var(--stub);border:1px solid var(--hair);border-radius:10px;
+  padding:13px 15px 13px 22px;text-align:left;width:100%;
+  transition:transform .12s ease,border-color .12s ease,background .12s ease;
+}
+/* perforated left edge */
+.stub::before{
+  content:"";position:absolute;left:9px;top:9px;bottom:9px;width:2px;
+  background-image:radial-gradient(circle at 1px 1px, var(--hair) 1px, transparent 1.2px);
+  background-size:2px 7px;
+}
+.stub:hover{border-color:var(--brass)}
+.stub:active{transform:scale(.985)}
+.tick{
+  flex:none;width:27px;height:27px;border-radius:50%;
+  border:2px solid var(--hair);display:grid;place-items:center;
+  transition:all .18s cubic-bezier(.34,1.56,.64,1);
+}
+.tick svg{width:14px;height:14px;stroke:var(--card);stroke-width:3.2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .22s ease .04s}
+.stub-body{flex:1;min-width:0}
+.stub-title{font-weight:600;font-size:15.5px;line-height:1.3}
+.stub-meta{display:flex;gap:7px;align-items:center;margin-top:3px;flex-wrap:wrap}
+.due{font-family:var(--mono);font-size:11px;color:var(--slate);letter-spacing:.04em}
+.stub-pay{
+  font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;
+  font-size:15px;color:var(--brass);flex:none;
+}
+
+.stub.done{background:var(--mint-soft);border-color:transparent}
+.stub.done::before{background-image:radial-gradient(circle at 1px 1px, var(--mint) 1px, transparent 1.2px);opacity:.45}
+.stub.done .tick{background:var(--mint);border-color:var(--mint)}
+.stub.done .tick svg{stroke-dashoffset:0}
+.stub.done .stub-title{text-decoration:line-through;text-decoration-thickness:1.5px;color:var(--slate)}
+.stub.done .stub-pay{color:var(--mint)}
+.stub.punching{animation:punch .34s cubic-bezier(.34,1.56,.64,1)}
+@keyframes punch{0%{transform:scale(1)}38%{transform:scale(.955)}100%{transform:scale(1)}}
+
+.pill{
+  font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;padding:2.5px 6px;border-radius:4px;
+}
+.pill.late{background:var(--rose-soft);color:var(--rose)}
+.pill.wait{background:var(--sunk);color:var(--slate)}
+.pill.bonus{background:var(--brass-soft);color:var(--brass)}
+
+.empty{
+  border:1px dashed var(--hair);border-radius:var(--r);padding:26px 18px;text-align:center;
+  color:var(--slate);font-size:14.5px;
+}
+
+/* ---- all-done banner ---- */
+.cleared{
+  margin-top:12px;background:var(--mint-soft);border-radius:var(--r);padding:16px 18px;
+  display:flex;gap:12px;align-items:center;
+}
+.cleared .eyebrow{color:var(--mint)}
+.cleared p{margin:2px 0 0;font-size:15px}
+
+/* ---- ledger ---- */
+.ledger{list-style:none;margin:0;padding:0;border-top:1px solid var(--hair)}
+.ledger li{
+  display:flex;justify-content:space-between;gap:12px;padding:11px 2px;
+  border-bottom:1px solid var(--hair);font-size:14.5px;align-items:baseline;
+}
+.ledger .when{font-family:var(--mono);font-size:11px;color:var(--slate);display:block;margin-top:1px;letter-spacing:.03em}
+.ledger .amt{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;flex:none}
+.amt.pos{color:var(--mint)}
+.amt.neg{color:var(--rose)}
+
+/* ---- parent ---- */
+.tabs{display:flex;gap:4px;background:var(--sunk);padding:4px;border-radius:11px;margin:6px 0 20px}
+.tabs button{
+  flex:1;border:none;background:transparent;border-radius:8px;padding:8px 4px;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--slate);
+}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px var(--shadow)}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--hair);border-radius:11px;padding:13px 14px}
+.stat .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:25px;line-height:1.15;letter-spacing:-.02em}
+.stat .v.brass{color:var(--brass)}
+.stat .v.rose{color:var(--rose)}
+.stat .eyebrow{margin-top:3px;display:block}
+
+.panel{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.panel > .eyebrow{display:block;margin-bottom:12px}
+
+.field{display:block;margin-bottom:12px}
+.field .eyebrow{display:block;margin-bottom:5px}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--sunk);border:1px solid var(--hair);border-radius:9px;
+  padding:10px 12px;font-size:15.5px;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brass);outline:none;background:var(--card)}
+.field textarea{resize:vertical;min-height:92px;line-height:1.45}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.hint{font-size:12.5px;color:var(--slate);margin:-6px 0 12px}
+
+.days{display:flex;gap:5px}
+.days label{flex:1}
+.days input{position:absolute;opacity:0;pointer-events:none}
+.days span{
+  display:grid;place-items:center;padding:9px 0;border-radius:8px;background:var(--sunk);
+  border:1px solid var(--hair);font-family:var(--mono);font-size:11px;font-weight:700;
+  color:var(--slate);letter-spacing:.02em;cursor:pointer;
+}
+.days input:checked + span{background:var(--brass);border-color:var(--brass);color:#fff}
+.days input:focus-visible + span{outline:2.5px solid var(--brass);outline-offset:2px}
+
+.btn{
+  border:none;border-radius:10px;padding:12px 16px;background:var(--ink);color:var(--paper);
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  width:100%;
+}
+.btn:hover{opacity:.88}
+.btn.brass{background:var(--brass);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--hair);color:var(--slate)}
+.btn.ghost:hover{border-color:var(--rose);color:var(--rose);opacity:1}
+.btn.sm{width:auto;padding:9px 13px;font-size:11px}
+.btnrow{display:flex;gap:9px}
+.btnrow .btn{flex:1}
+
+.chorerow{
+  display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--hair);
+}
+.chorerow:last-child{border-bottom:none;padding-bottom:0}
+.chorerow .info{flex:1;min-width:0}
+.chorerow .nm{font-weight:600;font-size:15px}
+.chorerow .sub{font-family:var(--mono);font-size:11px;color:var(--slate);letter-spacing:.03em;margin-top:2px}
+.chorerow .pay{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;color:var(--brass);font-size:14.5px}
+.linkbtn{
+  background:none;border:none;padding:5px 6px;font-family:var(--mono);font-size:10.5px;
+  font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--slate);
+}
+.linkbtn:hover{color:var(--brass)}
+.linkbtn.danger:hover{color:var(--rose)}
+
+.approval{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--hair)}
+.approval:last-child{border-bottom:none}
+.approval .info{flex:1;min-width:0}
+.approval .nm{font-weight:600;font-size:14.5px}
+.approval .sub{font-family:var(--mono);font-size:11px;color:var(--slate);margin-top:2px}
+.mini{
+  border:1px solid var(--hair);background:var(--card);border-radius:8px;width:34px;height:34px;
+  display:grid;place-items:center;flex:none;
+}
+.mini svg{width:15px;height:15px;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.mini.ok{border-color:var(--mint)} .mini.ok svg{stroke:var(--mint)}
+.mini.ok:hover{background:var(--mint)} .mini.ok:hover svg{stroke:var(--card)}
+.mini.no{border-color:var(--rose)} .mini.no svg{stroke:var(--rose)}
+.mini.no:hover{background:var(--rose)} .mini.no:hover svg{stroke:var(--card)}
+
+/* ---- modal ---- */
+.scrim{
+  position:fixed;inset:0;background:rgba(10,14,13,.55);backdrop-filter:blur(3px);
+  display:grid;place-items:center;padding:18px;z-index:60;
+}
+.scrim[hidden]{display:none}
+.sheet{
+  background:var(--card);border-radius:18px;padding:22px;width:100%;max-width:430px;
+  max-height:88vh;overflow-y:auto;box-shadow:0 18px 50px rgba(0,0,0,.3);
+}
+.sheet h3{margin:0 0 16px;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+
+/* pin */
+.pindots{display:flex;gap:11px;justify-content:center;margin:8px 0 20px}
+.pindot{width:13px;height:13px;border-radius:50%;border:2px solid var(--hair)}
+.pindot.on{background:var(--brass);border-color:var(--brass)}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.keys button{
+  background:var(--sunk);border:none;border-radius:11px;padding:16px 0;
+  font-family:var(--mono);font-size:21px;font-weight:600;
+}
+.keys button:hover{background:var(--brass-soft);color:var(--brass)}
+.keys button.wide{font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--slate)}
+.pinerr{text-align:center;color:var(--rose);font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.05em;min-height:17px;margin-bottom:6px}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+
+footer{padding:22px 18px 34px;text-align:center}
+footer p{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;color:var(--slate);text-transform:uppercase}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+
+<div class="app">
+  <header class="topbar" id="topbar">
+    <div class="brandmark"><span></span></div>
+    <div class="brandname" id="brandname">Punch Card</div>
+    <div class="grow"></div>
+    <button class="iconbtn" id="roleBtn">Parent</button>
+  </header>
+
+  <main>
+    <!-- ================= KID ================= -->
+    <section class="view" id="kidView">
+      <div class="takings">
+        <div class="takings-top">
+          <div>
+            <span class="eyebrow">Yours to collect</span>
+            <div class="amount num" id="kidBalance"><span class="cur">$</span>0.00</div>
+          </div>
+          <div class="pending" id="kidPending"></div>
+        </div>
+
+        <div class="strip">
+          <div class="strip-head">
+            <b id="streakLabel">No streak yet</b>
+            <span class="eyebrow" id="streakBest"></span>
+          </div>
+          <div class="punches" id="punches"></div>
+        </div>
+      </div>
+
+      <div class="note" id="kidNote" hidden>
+        <div>
+          <span class="eyebrow">Note from home</span>
+          <p id="kidNoteText"></p>
+        </div>
+      </div>
+
+      <div class="sechead">
+        <h2 id="todayHead">Today</h2>
+        <span class="count" id="todayCount"></span>
+      </div>
+      <ul class="stubs" id="todayList"></ul>
+      <div class="cleared" id="clearedBanner" hidden>
+        <div>
+          <span class="eyebrow">Card punched</span>
+          <p id="clearedText">Everything's done. Streak's safe.</p>
+        </div>
+      </div>
+
+      <div class="sechead"><h2>Recent earnings</h2></div>
+      <ul class="ledger" id="kidLedger"></ul>
+    </section>
+
+    <!-- ================= PARENT ================= -->
+    <section class="view" id="parentView" hidden>
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="review" aria-selected="true">Review</button>
+        <button role="tab" data-tab="chores" aria-selected="false">Chores</button>
+        <button role="tab" data-tab="money" aria-selected="false">Money</button>
+        <button role="tab" data-tab="rules" aria-selected="false">Rules</button>
+      </div>
+
+      <!-- REVIEW -->
+      <div class="tabpane" data-pane="review">
+        <div class="stats">
+          <div class="stat"><div class="v brass num" id="stBalance">$0</div><span class="eyebrow">Owed</span></div>
+          <div class="stat"><div class="v num" id="stStreak">0</div><span class="eyebrow">Day streak</span></div>
+          <div class="stat"><div class="v num" id="stToday">0/0</div><span class="eyebrow">Done today</span></div>
+          <div class="stat"><div class="v rose num" id="stPending">0</div><span class="eyebrow">Awaiting you</span></div>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Waiting for approval</span>
+          <div id="approvals"></div>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Note on their screen</span>
+          <label class="field">
+            <textarea id="msgInput" placeholder="Great work on the bathroom. Nan's coming Sunday — extra points for a tidy room."></textarea>
+          </label>
+          <div class="btnrow">
+            <button class="btn" id="msgSave">Post note</button>
+            <button class="btn ghost" id="msgClear">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHORES -->
+      <div class="tabpane" data-pane="chores" hidden>
+        <div class="panel">
+          <span class="eyebrow">Active chores</span>
+          <div id="choreList"></div>
+        </div>
+        <button class="btn brass" id="addChore">+ Add a chore</button>
+        <div class="panel" id="archivedPanel" hidden style="margin-top:14px">
+          <span class="eyebrow">Retired</span>
+          <div id="archivedList"></div>
+          <p class="hint" style="margin:10px 0 0">Retired chores stop appearing but stay in past records, so old streaks and totals don't change.</p>
+        </div>
+      </div>
+
+      <!-- MONEY -->
+      <div class="tabpane" data-pane="money" hidden>
+        <div class="panel">
+          <span class="eyebrow">Balance owed</span>
+          <div class="v brass num" id="moneyBalance" style="font-family:var(--mono);font-size:38px;font-weight:700;letter-spacing:-.02em;color:var(--brass)">$0.00</div>
+          <div class="btnrow" style="margin-top:14px">
+            <button class="btn brass" id="payAll">Pay it out</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Adjust by hand</span>
+          <div class="row2">
+            <label class="field"><span class="eyebrow">Amount</span>
+              <input type="number" id="adjAmt" step="0.25" placeholder="5.00"></label>
+            <label class="field"><span class="eyebrow">Direction</span>
+              <select id="adjDir"><option value="1">Add to balance</option><option value="-1">Take off balance</option></select></label>
+          </div>
+          <label class="field"><span class="eyebrow">Reason</span>
+            <input type="text" id="adjWhy" placeholder="Helped unload the car"></label>
+          <button class="btn" id="adjSave">Record it</button>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Everything so far</span>
+          <ul class="ledger" id="fullLedger"></ul>
+        </div>
+      </div>
+
+      <!-- RULES -->
+      <div class="tabpane" data-pane="rules" hidden>
+        <div class="panel">
+          <span class="eyebrow">Streak rewards</span>
+          <div class="row2">
+            <label class="field"><span class="eyebrow">Every N days</span><input type="number" id="rBonusEvery" min="0" step="1"></label>
+            <label class="field"><span class="eyebrow">Pay</span><input type="number" id="rBonusAmt" min="0" step="0.25"></label>
+          </div>
+          <div class="row2">
+            <label class="field"><span class="eyebrow">Milestone every</span><input type="number" id="rMileEvery" min="0" step="1"></label>
+            <label class="field"><span class="eyebrow">Pay</span><input type="number" id="rMileAmt" min="0" step="0.25"></label>
+          </div>
+          <p class="hint">A day counts toward the streak once every chore marked <b>required</b> for that day is approved. Days with nothing scheduled are skipped — they don't break it. Set N to 0 to turn a reward off.</p>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Deadlines</span>
+          <div class="row2">
+            <label class="field"><span class="eyebrow">Grace (mins)</span><input type="number" id="rGrace" min="0" step="5"></label>
+            <label class="field"><span class="eyebrow">Late pays</span>
+              <select id="rLate"><option value="100">Full amount</option><option value="50">Half</option><option value="0">Nothing</option></select></label>
+          </div>
+          <label class="field" style="display:flex;align-items:center;gap:10px;margin-bottom:0">
+            <input type="checkbox" id="rApprove" style="width:auto;flex:none">
+            <span style="font-size:14.5px">Chores need my approval before they pay</span>
+          </label>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Setup</span>
+          <label class="field"><span class="eyebrow">Kid's name</span><input type="text" id="rKid" placeholder="Lochlyn"></label>
+          <label class="field"><span class="eyebrow">Parent PIN (4 digits)</span><input type="text" id="rPin" inputmode="numeric" maxlength="4" placeholder="1234"></label>
+          <button class="btn" id="rulesSave">Save settings</button>
+        </div>
+
+        <div class="panel">
+          <span class="eyebrow">Danger zone</span>
+          <p class="hint" style="margin-top:0">Wipes chores, records and balance on this device. Can't be undone.</p>
+          <button class="btn ghost" id="wipe">Erase everything</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><p id="storageNote">Saved on this device</p></footer>
+</div>
+
+<!-- PIN -->
+<div class="scrim" id="pinScrim" hidden>
+  <div class="sheet" style="max-width:310px">
+    <h3>Parent PIN</h3>
+    <div class="pindots" id="pindots"></div>
+    <div class="pinerr" id="pinErr"></div>
+    <div class="keys" id="keys"></div>
+  </div>
+</div>
+
+<!-- CHORE EDITOR -->
+<div class="scrim" id="choreScrim" hidden>
+  <div class="sheet">
+    <h3 id="choreTitle">New chore</h3>
+    <label class="field"><span class="eyebrow">What is it</span>
+      <input type="text" id="cName" placeholder="Take the bins out"></label>
+    <div class="row2">
+      <label class="field"><span class="eyebrow">Pays</span>
+        <input type="number" id="cAmt" step="0.25" min="0" placeholder="1.00"></label>
+      <label class="field"><span class="eyebrow">Due by</span>
+        <input type="time" id="cDue"></label>
+    </div>
+    <div class="field">
+      <span class="eyebrow">Which days</span>
+      <div class="days" id="cDays"></div>
+    </div>
+    <label class="field" style="display:flex;align-items:center;gap:10px">
+      <input type="checkbox" id="cReq" style="width:auto;flex:none">
+      <span style="font-size:14.5px">Required — skipping it breaks the streak</span>
+    </label>
+    <div class="btnrow">
+      <button class="btn ghost" id="cCancel">Cancel</button>
+      <button class="btn brass" id="cSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti" hidden></canvas>
+
+<script>
+/* =====================================================================
+   PUNCH CARD — chores & earnings
+   Single file. No build step. Works offline on localStorage.
+
+   TO SYNC BETWEEN A PARENT PHONE AND A KID PHONE:
+   paste your Firebase web config below and the app switches to Realtime
+   Database automatically. Leave it null and everything stays on-device.
+   ===================================================================== */
+const FIREBASE_CONFIG = null;
+const FAMILY_ID = "family-1";   // change per family if you share one project
+
+/* ---------- dates ---------- */
+const DAYNAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parseYmd = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d); };
+const today = () => ymd(new Date());
+const addDays = (s,n) => { const d = parseYmd(s); d.setDate(d.getDate()+n); return ymd(d); };
+const weekdayOf = s => parseYmd(s).getDay();
+const money = n => (n < 0 ? "−$" : "$") + (Math.abs(Math.round(n*100)/100)).toFixed(2);
+const uid = () => Math.random().toString(36).slice(2,10);
+function prettyTime(hhmm){
+  if(!hhmm) return "";
+  let [h,m] = hhmm.split(":").map(Number);
+  const ap = h >= 12 ? "pm" : "am";
+  h = h % 12 || 12;
+  return m ? `${h}:${pad(m)}${ap}` : `${h}${ap}`;
+}
+
+/* ---------- default state ---------- */
+function seed(){
+  const t = today();
+  const everyday = [0,1,2,3,4,5,6];
+  return {
+    v: 1,
+    kidName: "",
+    pin: "1234",
+    settings: {
+      requireApproval: true,
+      graceMinutes: 30,
+      latePayPct: 50,
+      bonusEvery: 3,  bonusAmount: 1,
+      mileEvery: 10,  mileAmount: 5
+    },
+    chores: [
+      { id: uid(), title:"Make your bed",        amount:0.50, due:"08:00", days:everyday,      required:true,  createdAt:t, archivedAt:null },
+      { id: uid(), title:"Brush teeth (morning)",amount:0.25, due:"08:15", days:everyday,      required:true,  createdAt:t, archivedAt:null },
+      { id: uid(), title:"Homework done",        amount:1.00, due:"17:30", days:[1,2,3,4,5],   required:true,  createdAt:t, archivedAt:null },
+      { id: uid(), title:"Dishes in dishwasher", amount:0.75, due:"19:00", days:everyday,      required:true,  createdAt:t, archivedAt:null },
+      { id: uid(), title:"Take the bins out",    amount:1.50, due:"20:00", days:[2],           required:false, createdAt:t, archivedAt:null },
+      { id: uid(), title:"Vacuum the lounge",    amount:2.00, due:"18:00", days:[6],           required:false, createdAt:t, archivedAt:null }
+    ],
+    log: {},          // { "2026-07-28": { choreId: {at, late, status, amount, title} } }
+    adjustments: [],  // { id, at, amount, reason }
+    payouts: [],      // { id, at, amount }
+    message: null
+  };
+}
+
+/* ---------- storage ---------- */
+const KEY = "punchcard.v1";
+let state = null, remote = null;
+
+function loadLocal(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) return migrate(JSON.parse(raw));
+  }catch(e){ console.warn("Couldn't read saved data:", e); }
+  return seed();
+}
+function migrate(s){
+  const base = seed();
+  s.settings = Object.assign({}, base.settings, s.settings || {});
+  s.chores = (s.chores||[]).map(c => Object.assign({days:[0,1,2,3,4,5,6],createdAt:today(),archivedAt:null},c));
+  s.log = s.log || {}; s.adjustments = s.adjustments || []; s.payouts = s.payouts || [];
+  return s;
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }
+  catch(e){ console.warn("Couldn't save:", e); }
+  if(remote) remote.push(state);
+  render();
+}
+
+async function boot(){
+  state = loadLocal();
+  if(FIREBASE_CONFIG){
+    try{
+      const [{initializeApp}, db] = await Promise.all([
+        import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+        import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js")
+      ]);
+      const app = initializeApp(FIREBASE_CONFIG);
+      const d = db.getDatabase(app);
+      const ref = db.ref(d, "families/" + FAMILY_ID);
+      remote = { push: s => db.set(ref, s) };
+      db.onValue(ref, snap => {
+        const v = snap.val();
+        if(v){ state = migrate(v); localStorage.setItem(KEY, JSON.stringify(state)); render(); }
+        else db.set(ref, state);
+      });
+      document.getElementById("storageNote").textContent = "Synced across devices";
+    }catch(e){
+      console.warn("Firebase didn't load, staying on this device:", e);
+      document.getElementById("storageNote").textContent = "Offline — saved on this device";
+    }
+  }
+  render();
+}
+
+/* ---------- scheduling ---------- */
+function scheduledOn(chore, date){
+  if(date < chore.createdAt) return false;
+  if(chore.archivedAt && date >= chore.archivedAt) return false;
+  return chore.days.includes(weekdayOf(date));
+}
+const choresFor = date => state.chores.filter(c => scheduledOn(c, date))
+  .sort((a,b) => (a.due||"99:99").localeCompare(b.due||"99:99"));
+
+function entryOf(date, choreId){ return (state.log[date]||{})[choreId] || null; }
+function isPaid(e){ return e && e.status === "approved"; }
+function payOf(e){
+  if(!isPaid(e)) return 0;
+  return e.late ? e.amount * (state.settings.latePayPct/100) : e.amount;
+}
+
+/* ---------- ledger + streak, derived from the log every render ---------- */
+function computeLedger(){
+  const t = today();
+  const dates = Object.keys(state.log);
+  state.chores.forEach(c => dates.push(c.createdAt));
+  let start = dates.length ? dates.reduce((a,b) => a < b ? a : b) : t;
+  if(start > t) start = t;
+  if(parseYmd(t) - parseYmd(start) > 400*864e5) start = addDays(t, -400);
+
+  const entries = [];
+  let streak = 0, best = 0;
+  const punched = {};   // date -> true when the day counted
+
+  for(let d = start; d <= t; d = addDays(d, 1)){
+    for(const c of choresFor(d)){
+      const e = entryOf(d, c.id);
+      const amt = payOf(e);
+      if(amt > 0) entries.push({ at:e.at, date:d, label:e.title||c.title, amount:amt, kind:"chore", late:e.late });
+    }
+
+    const required = choresFor(d).filter(c => c.required);
+    if(!required.length) continue;                       // rest day — streak survives
+    const allDone = required.every(c => isPaid(entryOf(d, c.id)));
+
+    if(allDone){
+      streak++; punched[d] = true;
+      if(streak > best) best = streak;
+      const S = state.settings;
+      if(S.bonusEvery > 0 && S.bonusAmount > 0 && streak % S.bonusEvery === 0)
+        entries.push({ at:d+"T23:59", date:d, label:`${streak}-day streak`, amount:S.bonusAmount, kind:"bonus" });
+      if(S.mileEvery > 0 && S.mileAmount > 0 && streak % S.mileEvery === 0)
+        entries.push({ at:d+"T23:59", date:d, label:`${streak}-day milestone`, amount:S.mileAmount, kind:"bonus" });
+    } else if(d < t){
+      streak = 0;                                        // today isn't over yet
+    }
+  }
+
+  state.adjustments.forEach(a =>
+    entries.push({ at:a.at, date:a.at.slice(0,10), label:a.reason || (a.amount>0?"Added by parent":"Taken off"), amount:a.amount, kind:"adjust" }));
+  state.payouts.forEach(p =>
+    entries.push({ at:p.at, date:p.at.slice(0,10), label:"Paid out", amount:-p.amount, kind:"payout" }));
+
+  entries.sort((a,b) => String(b.at).localeCompare(String(a.at)));
+  const balance = entries.reduce((s,e) => s + e.amount, 0);
+  return { entries, balance, streak, best, punched };
+}
+
+/* ---------- actions ---------- */
+function toggleChore(choreId){
+  const t = today();
+  const chore = state.chores.find(c => c.id === choreId);
+  if(!chore) return;
+  state.log[t] = state.log[t] || {};
+  if(state.log[t][choreId]){ delete state.log[t][choreId]; save(); return; }
+
+  let late = false;
+  if(chore.due){
+    const [h,m] = chore.due.split(":").map(Number);
+    const cutoff = new Date(); cutoff.setHours(h, m + state.settings.graceMinutes, 0, 0);
+    late = new Date() > cutoff;
+  }
+  state.log[t][choreId] = {
+    at: new Date().toISOString(), late,
+    status: state.settings.requireApproval ? "pending" : "approved",
+    amount: chore.amount, title: chore.title
+  };
+  save();
+  celebrateIfCleared();
+}
+function setStatus(date, choreId, status){
+  const e = entryOf(date, choreId); if(!e) return;
+  if(status === "rejected") delete state.log[date][choreId];
+  else e.status = status;
+  save();
+}
+function celebrateIfCleared(){
+  const t = today();
+  const list = choresFor(t);
+  if(list.length && list.every(c => entryOf(t, c.id))) confetti();
+}
+
+/* ---------- render ---------- */
+let currentRole = "kid", currentTab = "review";
+
+function render(){
+  if(!state) return;
+  const L = computeLedger();
+  document.getElementById("brandname").textContent = state.kidName ? state.kidName + "'s card" : "Punch Card";
+  currentRole === "kid" ? renderKid(L) : renderParent(L);
+}
+
+function renderKid(L){
+  const t = today();
+  document.getElementById("kidBalance").innerHTML =
+    `${L.balance < 0 ? "−" : ""}<span class="cur">$</span>${Math.abs(L.balance).toFixed(2)}`;
+
+  const pendingCount = Object.values(state.log[t]||{}).filter(e => e.status === "pending").length;
+  document.getElementById("kidPending").textContent =
+    pendingCount ? `${pendingCount} waiting to be checked` : "";
+
+  // streak label + punch strip (last 7 scheduled-ish days, ending today)
+  document.getElementById("streakLabel").textContent =
+    L.streak ? `${L.streak}-day streak` : "No streak yet";
+  document.getElementById("streakBest").textContent = L.best ? `Best ${L.best}` : "";
+
+  const strip = document.getElementById("punches");
+  strip.innerHTML = "";
+  for(let i = 6; i >= 0; i--){
+    const d = addDays(t, -i);
+    const el = document.createElement("div");
+    el.className = "punch" + (L.punched[d] ? " hit" : "") + (d === t ? " today" : "");
+    el.innerHTML = `<i></i><small>${DAYNAMES[weekdayOf(d)][0]}</small>`;
+    strip.appendChild(el);
+  }
+
+  const note = document.getElementById("kidNote");
+  if(state.message && state.message.trim()){
+    note.hidden = false;
+    document.getElementById("kidNoteText").textContent = state.message;
+  } else note.hidden = true;
+
+  // today's stubs
+  const list = choresFor(t);
+  const doneCount = list.filter(c => entryOf(t, c.id)).length;
+  document.getElementById("todayHead").textContent =
+    parseYmd(t).toLocaleDateString(undefined,{weekday:"long"});
+  document.getElementById("todayCount").textContent = list.length ? `${doneCount} of ${list.length}` : "";
+
+  const ul = document.getElementById("todayList");
+  ul.innerHTML = "";
+  if(!list.length){
+    ul.innerHTML = `<div class="empty">Nothing on the card today. Enjoy it.</div>`;
+  } else {
+    for(const c of list){
+      const e = entryOf(t, c.id);
+      const li = document.createElement("li");
+      const btn = document.createElement("button");
+      btn.className = "stub" + (e ? " done" : "");
+      btn.innerHTML = `
+        <span class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.2 5.2L20 7"/></svg></span>
+        <span class="stub-body">
+          <span class="stub-title">${esc(c.title)}</span>
+          <span class="stub-meta">
+            ${c.due ? `<span class="due">by ${prettyTime(c.due)}</span>` : ""}
+            ${e && e.late ? `<span class="pill late">Late</span>` : ""}
+            ${e && e.status === "pending" ? `<span class="pill wait">Checking</span>` : ""}
+          </span>
+        </span>
+        <span class="stub-pay num">${money(c.amount)}</span>`;
+      btn.addEventListener("click", () => {
+        btn.classList.add("punching");
+        toggleChore(c.id);
+      });
+      li.appendChild(btn);
+      ul.appendChild(li);
+    }
+  }
+
+  const cleared = document.getElementById("clearedBanner");
+  cleared.hidden = !(list.length && doneCount === list.length);
+
+  // recent earnings
+  const led = document.getElementById("kidLedger");
+  led.innerHTML = "";
+  const recent = L.entries.slice(0, 8);
+  if(!recent.length){
+    led.innerHTML = `<div class="empty" style="border-top:none">${
+      pendingCount ? "Nothing's cleared yet — it lands here once it's checked."
+                   : "Punch your first chore and it shows up here."}</div>`;
+  } else {
+    for(const e of recent) led.appendChild(ledgerRow(e));
+  }
+}
+
+function ledgerRow(e){
+  const li = document.createElement("li");
+  const when = e.date === today() ? "Today" :
+               e.date === addDays(today(),-1) ? "Yesterday" :
+               parseYmd(e.date).toLocaleDateString(undefined,{month:"short",day:"numeric"});
+  li.innerHTML = `
+    <span>${esc(e.label)}${e.kind === "bonus" ? ' <span class="pill bonus">Bonus</span>' : ""}
+      <span class="when">${when}</span></span>
+    <span class="amt num ${e.amount >= 0 ? "pos" : "neg"}">${e.amount >= 0 ? "+" : "−"}${money(Math.abs(e.amount)).slice(1)}</span>`;
+  return li;
+}
+
+function renderParent(L){
+  const t = today();
+  const list = choresFor(t);
+  const doneToday = list.filter(c => entryOf(t, c.id)).length;
+  const pending = [];
+  Object.keys(state.log).forEach(d => Object.keys(state.log[d]).forEach(id => {
+    if(state.log[d][id].status === "pending") pending.push({date:d, id, e:state.log[d][id]});
+  }));
+  pending.sort((a,b) => String(b.e.at).localeCompare(String(a.e.at)));
+
+  document.getElementById("stBalance").textContent = money(L.balance);
+  document.getElementById("stStreak").textContent  = L.streak;
+  document.getElementById("stToday").textContent   = `${doneToday}/${list.length}`;
+  document.getElementById("stPending").textContent = pending.length;
+  document.getElementById("moneyBalance").textContent = money(L.balance);
+
+  // approvals
+  const ap = document.getElementById("approvals");
+  ap.innerHTML = "";
+  if(!pending.length){
+    ap.innerHTML = `<div class="empty">Nothing waiting. All caught up.</div>`;
+  } else {
+    for(const p of pending){
+      const when = p.date === t ? "today" : parseYmd(p.date).toLocaleDateString(undefined,{month:"short",day:"numeric"});
+      const row = document.createElement("div");
+      row.className = "approval";
+      row.innerHTML = `
+        <div class="info">
+          <div class="nm">${esc(p.e.title)}</div>
+          <div class="sub">${when} · ${money(p.e.amount)}${p.e.late ? " · late" : ""}</div>
+        </div>
+        <button class="mini ok" title="Approve"><svg viewBox="0 0 24 24"><path d="M4 12.5l5.2 5.2L20 7"/></svg></button>
+        <button class="mini no" title="Send back"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>`;
+      row.querySelector(".ok").onclick = () => setStatus(p.date, p.id, "approved");
+      row.querySelector(".no").onclick = () => setStatus(p.date, p.id, "rejected");
+      ap.appendChild(row);
+    }
+  }
+
+  // chores
+  const active = state.chores.filter(c => !c.archivedAt);
+  const archived = state.chores.filter(c => c.archivedAt);
+  const cl = document.getElementById("choreList");
+  cl.innerHTML = "";
+  if(!active.length) cl.innerHTML = `<div class="empty">No chores yet. Add the first one below.</div>`;
+  active.forEach(c => cl.appendChild(choreRow(c, false)));
+
+  const arPanel = document.getElementById("archivedPanel");
+  arPanel.hidden = !archived.length;
+  const al = document.getElementById("archivedList");
+  al.innerHTML = "";
+  archived.forEach(c => al.appendChild(choreRow(c, true)));
+
+  // full ledger
+  const fl = document.getElementById("fullLedger");
+  fl.innerHTML = "";
+  if(!L.entries.length) fl.innerHTML = `<div class="empty" style="border-top:none">No activity yet.</div>`;
+  L.entries.slice(0,60).forEach(e => fl.appendChild(ledgerRow(e)));
+
+  // forms
+  const S = state.settings;
+  setVal("rBonusEvery", S.bonusEvery); setVal("rBonusAmt", S.bonusAmount);
+  setVal("rMileEvery", S.mileEvery);   setVal("rMileAmt", S.mileAmount);
+  setVal("rGrace", S.graceMinutes);    setVal("rLate", S.latePayPct);
+  setVal("rKid", state.kidName);       setVal("rPin", state.pin);
+  document.getElementById("rApprove").checked = S.requireApproval;
+  setVal("msgInput", state.message || "");
+}
+
+function choreRow(c, isArchived){
+  const days = c.days.length === 7 ? "Every day"
+    : c.days.length === 5 && [1,2,3,4,5].every(d => c.days.includes(d)) ? "Weekdays"
+    : c.days.length === 0 ? "Never"
+    : c.days.slice().sort().map(d => DAYNAMES[d]).join(" ");
+  const row = document.createElement("div");
+  row.className = "chorerow";
+  row.innerHTML = `
+    <div class="info">
+      <div class="nm">${esc(c.title)}</div>
+      <div class="sub">${days}${c.due ? " · by " + prettyTime(c.due) : ""}${c.required ? " · required" : ""}</div>
+    </div>
+    <div class="pay num">${money(c.amount)}</div>
+    ${isArchived
+      ? `<button class="linkbtn restore">Restore</button>`
+      : `<button class="linkbtn edit">Edit</button><button class="linkbtn danger retire">Retire</button>`}`;
+  if(isArchived){
+    row.querySelector(".restore").onclick = () => { c.archivedAt = null; save(); };
+  } else {
+    row.querySelector(".edit").onclick = () => openChoreEditor(c);
+    row.querySelector(".retire").onclick = () => { c.archivedAt = today(); save(); };
+  }
+  return row;
+}
+
+const esc = s => String(s).replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const setVal = (id, v) => { const el = document.getElementById(id); if(el && document.activeElement !== el) el.value = v; };
+
+/* ---------- chore editor ---------- */
+let editing = null;
+const choreScrim = document.getElementById("choreScrim");
+
+(function buildDayToggles(){
+  const wrap = document.getElementById("cDays");
+  DAYNAMES.forEach((n,i) => {
+    const l = document.createElement("label");
+    l.innerHTML = `<input type="checkbox" value="${i}"><span>${n[0]}</span>`;
+    wrap.appendChild(l);
+  });
+})();
+
+function openChoreEditor(c){
+  editing = c || null;
+  document.getElementById("choreTitle").textContent = c ? "Edit chore" : "New chore";
+  document.getElementById("cName").value = c ? c.title : "";
+  document.getElementById("cAmt").value  = c ? c.amount : "";
+  document.getElementById("cDue").value  = c ? (c.due || "") : "18:00";
+  document.getElementById("cReq").checked = c ? !!c.required : true;
+  const days = c ? c.days : [0,1,2,3,4,5,6];
+  document.querySelectorAll("#cDays input").forEach(i => i.checked = days.includes(+i.value));
+  choreScrim.hidden = false;
+  document.getElementById("cName").focus();
+}
+document.getElementById("addChore").onclick = () => openChoreEditor(null);
+document.getElementById("cCancel").onclick = () => { choreScrim.hidden = true; };
+document.getElementById("cSave").onclick = () => {
+  const title = document.getElementById("cName").value.trim();
+  if(!title){ document.getElementById("cName").focus(); return; }
+  const days = [...document.querySelectorAll("#cDays input:checked")].map(i => +i.value);
+  const data = {
+    title,
+    amount: Math.max(0, parseFloat(document.getElementById("cAmt").value) || 0),
+    due: document.getElementById("cDue").value || "",
+    days,
+    required: document.getElementById("cReq").checked
+  };
+  if(editing) Object.assign(editing, data);
+  else state.chores.push(Object.assign({id:uid(), createdAt:today(), archivedAt:null}, data));
+  choreScrim.hidden = true;
+  save();
+};
+
+/* ---------- parent tabs + forms ---------- */
+document.querySelectorAll('[role="tab"]').forEach(b => b.onclick = () => {
+  currentTab = b.dataset.tab;
+  document.querySelectorAll('[role="tab"]').forEach(x => x.setAttribute("aria-selected", String(x === b)));
+  document.querySelectorAll(".tabpane").forEach(p => p.hidden = p.dataset.pane !== currentTab);
+});
+
+document.getElementById("rulesSave").onclick = () => {
+  const S = state.settings;
+  S.bonusEvery  = Math.max(0, parseInt(document.getElementById("rBonusEvery").value) || 0);
+  S.bonusAmount = Math.max(0, parseFloat(document.getElementById("rBonusAmt").value) || 0);
+  S.mileEvery   = Math.max(0, parseInt(document.getElementById("rMileEvery").value) || 0);
+  S.mileAmount  = Math.max(0, parseFloat(document.getElementById("rMileAmt").value) || 0);
+  S.graceMinutes= Math.max(0, parseInt(document.getElementById("rGrace").value) || 0);
+  S.latePayPct  = parseInt(document.getElementById("rLate").value);
+  S.requireApproval = document.getElementById("rApprove").checked;
+  state.kidName = document.getElementById("rKid").value.trim();
+  const pin = document.getElementById("rPin").value.replace(/\D/g,"").slice(0,4);
+  if(pin.length === 4) state.pin = pin;
+  save();
+};
+
+document.getElementById("msgSave").onclick = () => {
+  state.message = document.getElementById("msgInput").value.trim();
+  save();
+};
+document.getElementById("msgClear").onclick = () => {
+  state.message = null;
+  document.getElementById("msgInput").value = "";
+  save();
+};
+
+document.getElementById("adjSave").onclick = () => {
+  const amt = Math.abs(parseFloat(document.getElementById("adjAmt").value) || 0);
+  if(!amt) return;
+  const dir = parseInt(document.getElementById("adjDir").value);
+  state.adjustments.push({
+    id: uid(), at: new Date().toISOString(),
+    amount: amt * dir, reason: document.getElementById("adjWhy").value.trim()
+  });
+  document.getElementById("adjAmt").value = "";
+  document.getElementById("adjWhy").value = "";
+  save();
+};
+
+document.getElementById("payAll").onclick = () => {
+  const L = computeLedger();
+  if(L.balance <= 0) return;
+  state.payouts.push({ id: uid(), at: new Date().toISOString(), amount: L.balance });
+  save();
+};
+
+document.getElementById("wipe").onclick = () => {
+  if(!confirm("Erase all chores, records and balance? This can't be undone.")) return;
+  state = seed();
+  save();
+};
+
+/* ---------- role switch + PIN ---------- */
+const pinScrim = document.getElementById("pinScrim");
+let pinBuf = "";
+
+document.getElementById("roleBtn").onclick = () => {
+  if(currentRole === "parent"){ setRole("kid"); return; }
+  pinBuf = ""; drawPin();
+  document.getElementById("pinErr").textContent = "";
+  pinScrim.hidden = false;
+};
+function setRole(r){
+  currentRole = r;
+  document.getElementById("kidView").hidden = r !== "kid";
+  document.getElementById("parentView").hidden = r !== "parent";
+  document.getElementById("roleBtn").textContent = r === "kid" ? "Parent" : "Done";
+  window.scrollTo(0,0);
+  render();
+}
+(function buildKeys(){
+  const keys = document.getElementById("keys");
+  ["1","2","3","4","5","6","7","8","9","cancel","0","del"].forEach(k => {
+    const b = document.createElement("button");
+    if(k === "cancel"){ b.textContent = "Cancel"; b.className = "wide"; b.onclick = () => pinScrim.hidden = true; }
+    else if(k === "del"){ b.textContent = "Del"; b.className = "wide"; b.onclick = () => { pinBuf = pinBuf.slice(0,-1); drawPin(); }; }
+    else b.onclick = () => pushPin(k);
+    keys.appendChild(b);
+  });
+})();
+function pushPin(d){
+  if(pinBuf.length >= 4) return;
+  pinBuf += d; drawPin();
+  if(pinBuf.length === 4){
+    if(pinBuf === state.pin){ pinScrim.hidden = true; setRole("parent"); }
+    else {
+      document.getElementById("pinErr").textContent = "Not that one. Try again.";
+      pinBuf = ""; setTimeout(drawPin, 120);
+    }
+  }
+}
+function drawPin(){
+  const dots = document.getElementById("pindots");
+  dots.innerHTML = "";
+  for(let i = 0; i < 4; i++){
+    const d = document.createElement("div");
+    d.className = "pindot" + (i < pinBuf.length ? " on" : "");
+    dots.appendChild(d);
+  }
+}
+
+/* ---------- confetti ---------- */
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = document.getElementById("confetti");
+  const ctx = cv.getContext("2d");
+  const dpr = devicePixelRatio || 1;
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+  cv.style.width = innerWidth + "px"; cv.style.height = innerHeight + "px";
+  ctx.scale(dpr, dpr);
+  cv.hidden = false;
+
+  const colors = ["#F2BB4E","#41DCC2","#C74BAF","#7C3AED","#FFFFFF"];
+  const bits = Array.from({length:90}, () => ({
+    x: innerWidth * (.2 + Math.random() * .6), y: innerHeight * .34,
+    vx: (Math.random() - .5) * 9, vy: -7 - Math.random() * 8,
+    w: 5 + Math.random() * 6, h: 3 + Math.random() * 4,
+    rot: Math.random() * 6.28, vr: (Math.random() - .5) * .3,
+    c: colors[(Math.random() * colors.length) | 0]
+  }));
+  const t0 = performance.now();
+  (function frame(now){
+    const t = now - t0;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    bits.forEach(b => {
+      b.vy += .32; b.x += b.vx; b.y += b.vy; b.rot += b.vr; b.vx *= .995;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.rot);
+      ctx.globalAlpha = Math.max(0, 1 - t / 2100);
+      ctx.fillStyle = b.c; ctx.fillRect(-b.w/2, -b.h/2, b.w, b.h);
+      ctx.restore();
+    });
+    if(t < 2100) requestAnimationFrame(frame);
+    else { ctx.clearRect(0,0,innerWidth,innerHeight); cv.hidden = true; }
+  })(t0);
+}
+
+/* ---------- misc ---------- */
+addEventListener("scroll", () => {
+  document.getElementById("topbar").classList.toggle("stuck", scrollY > 4);
+}, {passive:true});
+addEventListener("keydown", e => {
+  if(e.key !== "Escape") return;
+  if(!choreScrim.hidden) choreScrim.hidden = true;
+  else if(!pinScrim.hidden) pinScrim.hidden = true;
+});
+// roll the day over without a reload
+let lastDay = today();
+setInterval(() => { if(today() !== lastDay){ lastDay = today(); render(); } }, 60000);
+
+boot();
+</script>
+
+</body>
+</html>
