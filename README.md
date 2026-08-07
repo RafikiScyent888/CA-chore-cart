@@ -35,7 +35,20 @@ Tap **Parent** (top right), enter the PIN, and you get four tabs:
 | **Review** | Approve or send back each finished chore. Post a note that shows on the kid's screen. |
 | **Chores** | Add, edit and retire chores — pay, due time, which days, and whether it's required. |
 | **Money** | Balance owed, one-tap payout, and manual add/subtract with a reason. |
-| **Rules** | Streak rewards, milestone bonuses, deadline grace, late-pay policy, PIN, kid's name. |
+| **Rules** | Streak rewards, milestone bonuses, deadline grace, late-pay policy, kid's name, PIN. |
+
+Tap the ◐ button in the top bar to switch **light / dark / follow-the-phone**.
+It's remembered per device, so the parent and the kid can each pick their own.
+
+### The PIN
+
+**Rules → Parent PIN → Change PIN.** It asks for the current PIN, then the new
+one twice. Obvious PINs are refused — no `1111`, no runs like `1234` — and the
+app nags while it's still on the factory `1234`.
+
+If someone gets it wrong 5 times the keypad locks for a minute, and the lockout
+survives closing the app, so guessing a 4-digit PIN is slow going. The PIN is
+never shown on screen.
 
 The kid's screen shows their balance, a 7-day punch strip for the streak, and
 today's chores as tear-off stubs.
@@ -79,25 +92,31 @@ const FIREBASE_CONFIG = {
 const FAMILY_ID = "family-1";
 ```
 
-That's the only change needed — the sync code is already there and switches on
-by itself. The footer changes from "Saved on this device" to "Synced across
-devices" once it connects. If Firebase can't be reached the app falls back to
-local storage instead of breaking.
+That's the only change needed — the sync and login code is already there and
+switches on by itself. See `FIREBASE-SETUP.md` for the full walkthrough,
+including creating accounts and writing the security rules. If Firebase can't
+be reached the app falls back to local storage instead of breaking.
 
 ---
 
-## Security — please read
+## Security
 
-There is **no authentication**. Anyone with the URL can read and write the
-family's data, and the PIN is client-side JavaScript — a speed bump for a
-nine-year-old, not real security.
+The app has a real login. With Firebase configured (see `FIREBASE-SETUP.md`),
+nothing loads until you sign in, and the database rules only admit the specific
+accounts you allow-list. Someone who gets hold of the file sees a sign-in screen
+and nothing else.
 
-That's fine for chore data. Don't put anything sensitive in it.
+Signing out (Parent → Rules → Sign out) clears that phone's cached copy.
 
-To make it real, turn on Firebase **Anonymous Auth** and add database rules
-scoped to the family ID, so an unauthenticated request can't read the tree.
+**Without** Firebase the app is local-only: no login, everything stays on the one
+device, and the in-app PIN is a speed bump rather than security. That's fine for
+a single shared phone.
 
----
+One limit worth knowing either way: the kid knows their own password, so the PIN
+guards the parent *screen*, not the underlying data — a determined kid could edit
+the database directly via the Firebase console. Per-role rules would close that.
+
+Don't put addresses, school details, or anything sensitive in the chore notes.
 
 ## Data model
 
