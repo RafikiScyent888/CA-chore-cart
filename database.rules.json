@@ -5,7 +5,7 @@
         ".read": "auth != null && ($fid === 'fam-219ncuyri2xossyhxr5lsynl') && (auth.uid === 'PARENT_UID' || auth.uid === 'KID_UID')",
         ".write": "auth != null && ($fid === 'fam-219ncuyri2xossyhxr5lsynl') && auth.uid === 'PARENT_UID'",
 
-        "log": {
+        "log": { 
           "$date": {
             "$chore": {
               ".write": "auth != null && auth.uid === 'KID_UID' && $date.matches(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) && root.child('families').child($fid).child('config/chores').hasChild($chore)",
