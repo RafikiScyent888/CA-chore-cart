@@ -128,8 +128,12 @@ the accounts here, which is what keeps strangers out.
    ⚠️ **Not Word or Pages.** They replace straight quotes `"` with curly ones `"`
    and the file silently stops working.
 
-2. Search for **`STEP 4`** (Ctrl+F / Cmd+F) — there's a big comment marking the spot
-3. Just below it, replace the word `null`:
+2. Search for **`>>> HERE <<<`** (Ctrl+F / Cmd+F)
+3. On the line **directly below that marker**, replace the word `null`:
+
+   ⚠️ **Paste it on the code line, not inside the comment above it.** If the
+   line still reads `const FIREBASE_CONFIG = null;` afterwards, nothing will
+   sync and the app will say *"Saved on this device"*.
 
    ```js
    const FIREBASE_CONFIG = {
@@ -231,7 +235,11 @@ claims the family as parent.
 
    - **"Synced · parent@yourfamily.com"** → working 🎉
    - **"No access — check the database rules"** → the UIDs in step 6 don't match
-   - **"Saved on this device"** → the config didn't parse, see troubleshooting
+   - **"Offline — saved on this device"** → config is being read, but Firebase
+     couldn't be reached. Check the connection.
+   - **"Saved on this device"** (no "Offline") → the config never took. The line
+     still says `null` — you probably pasted into the comment instead of the
+     code line below it.
 
 5. Tick a chore. In Firebase → **Realtime Database → Data**, you should see
    `config`, `ledger` and `log` appear under your family.
