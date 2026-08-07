@@ -96,11 +96,13 @@ phones see the same data, add Firebase:
 
 ```js
 const FIREBASE_CONFIG = {
-  apiKey: "...",
-  authDomain: "....firebaseapp.com",
-  databaseURL: "https://....firebasedatabase.app",
-  projectId: "...",
-  appId: "..."
+  apiKey: "AIzaSyDGOhN-my6Pwx8kJ54QO9-agUe7zVQEUp0",
+  authDomain: "ca-chore-list.firebaseapp.com",
+  databaseURL: "https://ca-chore-list-default-rtdb.firebaseio.com",
+  projectId: "ca-chore-list",
+  storageBucket: "ca-chore-list.firebasestorage.app",
+  messagingSenderId: "380994618093",
+  appId: "1:380994618093:web:72e8a1e73e25e5c489c2e4"
 };
 const FAMILY_ID = "family-1";
 ```
