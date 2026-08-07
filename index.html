@@ -22,85 +22,205 @@
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
   --r:14px;
-  /* --- NEBULA: light ("daylight nebula" — lavender paper) --- */
-  --paper:#F3F0FA;
+  /* --- NEBULA: light (lavender paper) --- */
+  --paper:#F4EFFA;
   --card:#FFFFFF;
-  --sunk:#EBE5F7;
-  --ink:#191031;
-  --slate:#5B4F76;
-  --hair:#DBD3EC;
-  --brass:#7E5507;        /* starlight gold — money */
-  --brass-soft:#F8EACB;
-  --mint:#0C6A5D;         /* ionized oxygen teal — done */
-  --mint-soft:#D5EFEA;
-  --rose:#B03328;         /* hydrogen-alpha coral — late */
-  --rose-soft:#FADFDB;
-  --shadow:rgba(30,16,60,.10);
-  --stub:#FCFAFF;
-  --neb-a:rgba(124,58,190,.13);
-  --neb-b:rgba(199,60,160,.10);
-  --neb-card:rgba(139,92,246,.09);
-  --note-bg:#ECE3FB;
-  --note-ink:#54329C;
-  --punch:#F6F2FD;
+  --sunk:#EFE7F6;
+  --ink:#1C1030;
+  --slate:#4E4169;
+  --hair:#E0D4EE;
+  --brass:#7A5206;        /* starlight gold — money */
+  --brass-soft:#F9E9C6;
+  --mint:#0B6A5C;         /* ionised oxygen teal — done */
+  --mint-soft:#D3EFE9;
+  --rose:#AE3128;         /* hydrogen-alpha coral — late */
+  --rose-soft:#FADEDA;
+  --shadow:rgba(32,14,60,.10);
+  --stub:#FDFAFF;
+  --card-bg:rgba(255,255,255,.82);
+  --stub-bg:rgba(253,250,255,.80);
+  --sky-top:#FBF7FE;
+  --au-1:rgba(150,90,255,.30);
+  --au-2:rgba(214,80,200,.24);
+  --au-3:rgba(110,70,230,.28);
+  --au-4:rgba(45,190,170,.14);
+  --au-card:rgba(150,90,255,.10);
+  --al-1:rgba(150,90,255,.44);
+  --al-2:rgba(214,80,200,.32);
+  --al-3:rgba(110,70,230,.36);
+  --al-4:rgba(45,190,170,.16);
+  --al-glow:rgba(150,90,255,.20);
+  --note-bg:#F0E3FB;
+  --note-ink:#6B2E9E;
+  --punch:#EDE3F8;
   --star:transparent;
   --star-op:0;
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --paper:#0B0716;
-    --card:#171029;
-    --sunk:#110B20;
-    --ink:#EEE9F8;
-    --slate:#ADA0CA;
-    --hair:#2E2450;
-    --brass:#F2BB4E;
-    --brass-soft:#3B2C11;
-    --mint:#41DCC2;
-    --mint-soft:#0F332F;
-    --rose:#FF8878;
-    --rose-soft:#3B1D1C;
-    --shadow:rgba(0,0,0,.55);
-    --stub:#1C1430;
-    --neb-a:rgba(124,58,237,.32);
-    --neb-b:rgba(214,51,168,.22);
-    --neb-card:rgba(160,80,230,.20);
-    --note-bg:#241842;
-    --note-ink:#C9AEF7;
-    --punch:#1F1638;
+    --paper:#0A0714;
+    --card:#1A1230;
+    --sunk:#130D24;
+    --ink:#F0EAFA;
+    --slate:#DDD4F0;
+    --hair:#362A5E;
+    --brass:#F5C05A;
+    --brass-soft:#40300F;
+    --mint:#3FDCC6;
+    --mint-soft:#0D3330;
+    --rose:#FF8A86;
+    --rose-soft:#3F1E22;
+    --shadow:rgba(0,0,0,.6);
+    --stub:#201640;
+    --card-bg:rgba(26,18,48,.78);
+    --stub-bg:rgba(32,22,64,.72);
+    --sky-top:#1A1038;
+    --au-1:rgba(158,102,255,.60);
+    --au-2:rgba(219,84,204,.52);
+    --au-3:rgba(112,72,232,.56);
+    --au-4:rgba(63,217,198,.26);
+    --au-card:rgba(168,96,240,.24);
+    --al-1:rgba(150,80,255,.88);
+    --al-2:rgba(216,72,202,.66);
+    --al-3:rgba(96,64,235,.74);
+    --al-4:rgba(60,215,195,.30);
+    --al-glow:rgba(140,80,250,.42);
+    --note-bg:#2A1A4D;
+    --note-ink:#D3B4FA;
+    --punch:#241941;
     --star:rgba(255,255,255,.85);
     --star-op:.85;
   }
 }
 :root[data-theme="light"]{
-  --paper:#F3F0FA; --card:#FFFFFF; --sunk:#EBE5F7; --ink:#191031; --slate:#5B4F76;
-  --hair:#DBD3EC; --brass:#7E5507; --brass-soft:#F8EACB; --mint:#0C6A5D; --mint-soft:#D5EFEA;
-  --rose:#B03328; --rose-soft:#FADFDB; --shadow:rgba(30,16,60,.10); --stub:#FCFAFF;
-  --neb-a:rgba(124,58,190,.13); --neb-b:rgba(199,60,160,.10); --neb-card:rgba(139,92,246,.09);
-  --note-bg:#ECE3FB; --note-ink:#54329C; --punch:#F6F2FD; --star:transparent; --star-op:0;
+  --paper:#F4EFFA;
+  --card:#FFFFFF;
+  --sunk:#EFE7F6;
+  --ink:#1C1030;
+  --slate:#4E4169;
+  --hair:#E0D4EE;
+  --brass:#7A5206;
+  --brass-soft:#F9E9C6;
+  --mint:#0B6A5C;
+  --mint-soft:#D3EFE9;
+  --rose:#AE3128;
+  --rose-soft:#FADEDA;
+  --shadow:rgba(32,14,60,.10);
+  --stub:#FDFAFF;
+  --card-bg:rgba(255,255,255,.82);
+  --stub-bg:rgba(253,250,255,.80);
+  --sky-top:#FBF7FE;
+  --au-1:rgba(150,90,255,.30);
+  --au-2:rgba(214,80,200,.24);
+  --au-3:rgba(110,70,230,.28);
+  --au-4:rgba(45,190,170,.14);
+  --au-card:rgba(150,90,255,.10);
+  --al-1:rgba(150,90,255,.44);
+  --al-2:rgba(214,80,200,.32);
+  --al-3:rgba(110,70,230,.36);
+  --al-4:rgba(45,190,170,.16);
+  --al-glow:rgba(150,90,255,.20);
+  --card-bg:rgba(255,255,255,.82);
+  --stub-bg:rgba(253,250,255,.80);
+  --note-bg:#F0E3FB;
+  --note-ink:#6B2E9E;
+  --punch:#EDE3F8;
+  --star:transparent;
+  --star-op:0;
 }
 :root[data-theme="dark"]{
-  --paper:#0B0716; --card:#171029; --sunk:#110B20; --ink:#EEE9F8; --slate:#ADA0CA;
-  --hair:#2E2450; --brass:#F2BB4E; --brass-soft:#3B2C11; --mint:#41DCC2; --mint-soft:#0F332F;
-  --rose:#FF8878; --rose-soft:#3B1D1C; --shadow:rgba(0,0,0,.55); --stub:#1C1430;
-  --neb-a:rgba(124,58,237,.32); --neb-b:rgba(214,51,168,.22); --neb-card:rgba(160,80,230,.20);
-  --note-bg:#241842; --note-ink:#C9AEF7; --punch:#1F1638; --star:rgba(255,255,255,.85); --star-op:.85;
+  --paper:#0A0714;
+  --card:#1A1230;
+  --sunk:#130D24;
+  --ink:#F0EAFA;
+  --slate:#DDD4F0;
+  --hair:#362A5E;
+  --brass:#F5C05A;
+  --brass-soft:#40300F;
+  --mint:#3FDCC6;
+  --mint-soft:#0D3330;
+  --rose:#FF8A86;
+  --rose-soft:#3F1E22;
+  --shadow:rgba(0,0,0,.6);
+  --stub:#201640;
+  --sky-top:#1A1038;
+  --au-1:rgba(158,102,255,.60);
+  --au-2:rgba(219,84,204,.52);
+  --au-3:rgba(112,72,232,.56);
+  --au-4:rgba(63,217,198,.26);
+  --au-card:rgba(168,96,240,.24);
+  --al-1:rgba(150,80,255,.88);
+  --al-2:rgba(216,72,202,.66);
+  --al-3:rgba(96,64,235,.74);
+  --al-4:rgba(60,215,195,.30);
+  --al-glow:rgba(140,80,250,.42);
+  --card-bg:rgba(26,18,48,.78);
+  --stub-bg:rgba(32,22,64,.72);
+  --note-bg:#2A1A4D;
+  --note-ink:#D3B4FA;
+  --punch:#241941;
+  --star:rgba(255,255,255,.85);
+  --star-op:.85;
 }
 
 *{box-sizing:border-box}
 /* every component below sets its own display, which would otherwise
    out-specify the hidden attribute — keep hidden authoritative */
 [hidden]{display:none !important}
-html{-webkit-text-size-adjust:100%}
+/* The aurora layers deliberately extend past the viewport edges so the
+   curtains don't stop dead at the sides. `clip` trims that overhang without
+   creating a scroll container, which `hidden` would — and which would break
+   the fixed-position layers. */
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
+/* long names shrink rather than shove the buttons off-screen */
+.brandname{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 body{
+  /* positioned + clipped so the skewed aurora layers, which are deliberately
+     wider than the screen, can't add horizontal scroll on a narrow phone */
+  position:relative; overflow-x:clip;
   margin:0; color:var(--ink);
   font-family:var(--sans); font-size:16px; line-height:1.5;
   -webkit-font-smoothing:antialiased;
-  background:
-    radial-gradient(1100px 620px at 12% -8%, var(--neb-a), transparent 62%),
-    radial-gradient(900px 520px at 92% 6%, var(--neb-b), transparent 60%),
-    var(--paper);
+  background:linear-gradient(178deg, var(--sky-top) 0%, var(--paper) 62%);
   background-attachment:fixed;
+}
+/* Aurora, in two layers.
+
+   .aurora is the real thing: bright, and anchored to the TOP OF THE DOCUMENT
+   rather than the viewport, so it scrolls away. Only the top bar and the
+   balance card — both translucent surfaces — ever sit on top of it, which is
+   what lets it be this bright without hurting any text.
+
+   .aurora-far is a dim wash over the whole page so the rest isn't flat. Its
+   brightness is capped by the bare section headings that scroll across it. */
+.aurora{
+  position:absolute; top:0; left:0; right:0; height:400px; overflow:hidden;
+  z-index:-2; pointer-events:none; transform:skewX(-12deg);
+  background:
+    radial-gradient(88% 44% at 50% -8%, var(--al-glow), transparent 72%),
+    radial-gradient( 6% 60% at 10% 4%,  var(--al-1), transparent 70%),
+    radial-gradient( 5% 72% at 20% -4%, var(--al-2), transparent 68%),
+    radial-gradient( 7% 52% at 31% 8%,  var(--al-1), transparent 70%),
+    radial-gradient( 5% 66% at 42% 0%,  var(--al-3), transparent 68%),
+    radial-gradient( 6% 56% at 53% 6%,  var(--al-2), transparent 70%),
+    radial-gradient( 7% 70% at 65% -2%, var(--al-1), transparent 68%),
+    radial-gradient( 5% 50% at 76% 8%,  var(--al-3), transparent 70%),
+    radial-gradient( 6% 62% at 88% 0%,  var(--al-1), transparent 68%),
+    radial-gradient( 5% 44% at 96% 6%,  var(--al-4), transparent 72%);
+  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 50%, transparent 90%);
+  mask-image:linear-gradient(to bottom, #000 0%, #000 50%, transparent 90%);
+}
+.aurora-far{
+  position:fixed; top:-6%; left:0; right:0; height:104vh; overflow:hidden;
+  z-index:-3; pointer-events:none; transform:skewX(-9deg);
+  background:
+    radial-gradient(10% 60% at 13% 0%,  var(--au-1), transparent 72%),
+    radial-gradient( 9% 70% at 32% -5%, var(--au-2), transparent 70%),
+    radial-gradient(11% 54% at 51% 2%,  var(--au-3), transparent 72%),
+    radial-gradient( 8% 64% at 69% -3%, var(--au-1), transparent 70%),
+    radial-gradient(10% 46% at 87% 0%,  var(--au-4), transparent 72%);
+  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 52%, transparent 96%);
+  mask-image:linear-gradient(to bottom, #000 0%, #000 52%, transparent 96%);
 }
 /* starfield — dark theme only, sits behind everything */
 body::before{
@@ -138,7 +258,7 @@ button{cursor:pointer}
   display:flex;align-items:center;gap:10px;padding:14px 18px 10px;
   position:sticky;top:0;z-index:20;
   /* translucent so the nebula shows through instead of a flat block */
-  background:color-mix(in srgb, var(--paper) 78%, transparent);
+  background:color-mix(in srgb, var(--paper) 86%, transparent);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid transparent;transition:border-color .2s;
 }
@@ -159,6 +279,11 @@ button{cursor:pointer}
   letter-spacing:.08em;text-transform:uppercase;color:var(--slate);
 }
 .iconbtn:hover{border-color:var(--brass);color:var(--brass)}
+.iconbtn.sq{padding:6px 8px;line-height:0}
+.iconbtn.sq svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;display:block}
+.iconbtn.warn{border-color:var(--rose);color:var(--rose)}
+.iconbtn.warn:hover{border-color:var(--rose);color:var(--rose)}
 
 main{flex:1;padding:0 18px 40px}
 .view[hidden]{display:none}
@@ -166,8 +291,8 @@ main{flex:1;padding:0 18px 40px}
 /* ---- kid: takings ---- */
 .takings{
   background:
-    radial-gradient(130% 150% at 88% -10%, var(--neb-card), transparent 68%),
-    var(--card);
+    radial-gradient(120% 90% at 78% -20%, var(--au-card), transparent 72%),
+    var(--card-bg);
   border:1px solid var(--hair);border-radius:var(--r);
   padding:20px 20px 18px;box-shadow:0 1px 2px var(--shadow);margin-top:6px;
 }
@@ -224,7 +349,7 @@ main{flex:1;padding:0 18px 40px}
 .stubs{display:flex;flex-direction:column;gap:9px;list-style:none;margin:0;padding:0}
 .stub{
   position:relative;display:flex;align-items:center;gap:13px;
-  background:var(--stub);border:1px solid var(--hair);border-radius:10px;
+  background:var(--stub-bg);border:1px solid var(--hair);border-radius:10px;
   padding:13px 15px 13px 22px;text-align:left;width:100%;
   transition:transform .12s ease,border-color .12s ease,background .12s ease;
 }
@@ -304,13 +429,13 @@ main{flex:1;padding:0 18px 40px}
 .tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px var(--shadow)}
 
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
-.stat{background:var(--card);border:1px solid var(--hair);border-radius:11px;padding:13px 14px}
+.stat{background:var(--card-bg);border:1px solid var(--hair);border-radius:11px;padding:13px 14px}
 .stat .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:25px;line-height:1.15;letter-spacing:-.02em}
 .stat .v.brass{color:var(--brass)}
 .stat .v.rose{color:var(--rose)}
 .stat .eyebrow{margin-top:3px;display:block}
 
-.panel{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.panel{background:var(--card-bg);border:1px solid var(--hair);border-radius:var(--r);padding:16px;margin-bottom:14px}
 .panel > .eyebrow{display:block;margin-bottom:12px}
 
 .field{display:block;margin-bottom:12px}
@@ -388,10 +513,7 @@ main{flex:1;padding:0 18px 40px}
 /* the sign-in gate must be OPAQUE — a translucent scrim leaves the cached
    family data legible behind it, which defeats the whole point */
 #authScrim{
-  background:
-    radial-gradient(1100px 620px at 12% -8%, var(--neb-a), transparent 62%),
-    radial-gradient(900px 520px at 92% 6%, var(--neb-b), transparent 60%),
-    var(--paper);
+  background:linear-gradient(178deg, var(--sky-top) 0%, var(--paper) 62%);
   backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 #authScrim .sheet{border:1px solid var(--hair)}
@@ -425,11 +547,18 @@ footer p{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
 }
 </style>
 
+<div class="aurora-far"></div>
+<div class="aurora"></div>
+
 <div class="app">
   <header class="topbar" id="topbar">
     <div class="brandmark"><span></span></div>
     <div class="brandname" id="brandname">Punch Card</div>
     <div class="grow"></div>
+    <button class="iconbtn sq" id="themeBtn" aria-label="Colour theme" title="Colour theme"></button>
+    <button class="iconbtn sq" id="pinBtn" aria-label="Change PIN" title="Change PIN" hidden>
+      <svg viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10" rx="2.2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+    </button>
     <button class="iconbtn" id="roleBtn">Parent</button>
   </header>
 
@@ -585,10 +714,11 @@ footer p{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
 
         <div class="panel">
           <span class="eyebrow">Setup</span>
-          <label class="field"><span class="eyebrow">Kid's name</span><input type="text" id="rKid" placeholder="Lochlyn"></label>
-          <label class="field"><span class="eyebrow">Parent PIN (4 digits)</span><input type="text" id="rPin" inputmode="numeric" maxlength="4" placeholder="1234"></label>
+          <label class="field"><span class="eyebrow">Kid's name</span><input type="text" id="rKid" placeholder="Christen Ariel"></label>
           <button class="btn" id="rulesSave">Save settings</button>
         </div>
+
+
 
         <div class="panel" id="accountPanel" hidden>
           <span class="eyebrow">Account</span>
@@ -641,6 +771,24 @@ footer p{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
   </div>
 </div>
 
+<!-- CHANGE PIN -->
+<div class="scrim" id="pinChangeScrim" hidden>
+  <div class="sheet" style="max-width:340px">
+    <h3>Change PIN</h3>
+    <label class="field"><span class="eyebrow">Current PIN</span>
+      <input type="password" id="pcOld" inputmode="numeric" maxlength="4" autocomplete="off"></label>
+    <label class="field"><span class="eyebrow">New PIN</span>
+      <input type="password" id="pcNew" inputmode="numeric" maxlength="4" autocomplete="new-password"></label>
+    <label class="field"><span class="eyebrow">New PIN again</span>
+      <input type="password" id="pcNew2" inputmode="numeric" maxlength="4" autocomplete="new-password"></label>
+    <div class="pinerr" id="pcErr" style="text-align:left;margin-bottom:10px"></div>
+    <div class="btnrow">
+      <button class="btn ghost" id="pcCancel">Cancel</button>
+      <button class="btn brass" id="pcSave">Save PIN</button>
+    </div>
+  </div>
+</div>
+
 <!-- CHORE EDITOR -->
 <div class="scrim" id="choreScrim" hidden>
   <div class="sheet">
@@ -686,13 +834,13 @@ footer p{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
    you. It should end up looking like this:
 
    const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDGOhN-my6Pwx8kJ54QO9-agUe7zVQEUp0",
-  authDomain: "ca-chore-list.firebaseapp.com",
-  databaseURL: "https://ca-chore-list-default-rtdb.firebaseio.com",
-  projectId: "ca-chore-list",
-  storageBucket: "ca-chore-list.firebasestorage.app",
-  messagingSenderId: "380994618093",
-  appId: "1:380994618093:web:72e8a1e73e25e5c489c2e4"
+     apiKey: "AIzaSy...",
+     authDomain: "your-project.firebaseapp.com",
+     databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+     projectId: "your-project",
+     storageBucket: "your-project.appspot.com",
+     messagingSenderId: "123456789",
+     appId: "1:123:web:abc"
    };
 
    Keep the semicolon at the end. Don't change anything else.
@@ -731,7 +879,7 @@ function seed(){
   const everyday = [0,1,2,3,4,5,6];
   return {
     v: 1,
-    kidName: "",
+    kidName: "Christen Ariel",
     pin: "1234",
     settings: {
       requireApproval: true,
@@ -1113,6 +1261,12 @@ function render(){
   document.getElementById("brandname").textContent = state.kidName ? state.kidName + "'s card" : "Punch Card";
   // a kid's device never offers the parent screen at all
   document.getElementById("roleBtn").hidden = (currentRole === "kid" && !isParent());
+  // change-PIN sits beside it, but only once you're actually in the parent view
+  const pinBtn = document.getElementById("pinBtn");
+  pinBtn.hidden = currentRole !== "parent";
+  const stock = state.pin === "1234";
+  pinBtn.classList.toggle("warn", stock);
+  pinBtn.title = stock ? "PIN is still 1234 — change it" : "Change PIN";
   currentRole === "kid" ? renderKid(L) : renderParent(L);
 }
 
@@ -1275,7 +1429,7 @@ function renderParent(L){
   setVal("rBonusEvery", S.bonusEvery); setVal("rBonusAmt", S.bonusAmount);
   setVal("rMileEvery", S.mileEvery);   setVal("rMileAmt", S.mileAmount);
   setVal("rGrace", S.graceMinutes);    setVal("rLate", S.latePayPct);
-  setVal("rKid", state.kidName);       setVal("rPin", state.pin);
+  setVal("rKid", state.kidName);
   document.getElementById("rApprove").checked = S.requireApproval;
   setVal("msgInput", state.message || "");
 
@@ -1378,8 +1532,6 @@ document.getElementById("rulesSave").onclick = () => {
   S.latePayPct  = parseInt(document.getElementById("rLate").value);
   S.requireApproval = document.getElementById("rApprove").checked;
   state.kidName = document.getElementById("rKid").value.trim();
-  const pin = document.getElementById("rPin").value.replace(/\D/g,"").slice(0,4);
-  if(pin.length === 4) state.pin = pin;
   save("config");
 };
 
@@ -1444,7 +1596,9 @@ let pinBuf = "";
 document.getElementById("roleBtn").onclick = () => {
   if(currentRole === "parent"){ setRole("kid"); return; }
   pinBuf = ""; drawPin();
-  document.getElementById("pinErr").textContent = "";
+  const wait = lockedFor();
+  document.getElementById("pinErr").textContent =
+    wait ? `Too many tries. Wait ${wait}s.` : "";
   pinScrim.hidden = false;
 };
 function setRole(r){
@@ -1466,12 +1620,27 @@ function setRole(r){
   });
 })();
 function pushPin(d){
+  const wait = lockedFor();
+  if(wait){
+    document.getElementById("pinErr").textContent = `Too many tries. Wait ${wait}s.`;
+    return;
+  }
   if(pinBuf.length >= 4) return;
   pinBuf += d; drawPin();
   if(pinBuf.length === 4){
-    if(pinBuf === state.pin){ pinScrim.hidden = true; setRole("parent"); }
-    else {
-      document.getElementById("pinErr").textContent = "Not that one. Try again.";
+    if(pinBuf === state.pin){
+      clearPinLock();
+      pinScrim.hidden = true;
+      setRole("parent");
+    } else {
+      const L = pinLock();
+      L.fails = (L.fails || 0) + 1;
+      if(L.fails >= MAX_TRIES){ L.until = Date.now() + LOCK_MS; L.fails = 0; }
+      setPinLock(L);
+      const w = lockedFor();
+      document.getElementById("pinErr").textContent = w
+        ? `Too many tries. Wait ${w}s.`
+        : `Not that one. ${MAX_TRIES - L.fails} left.`;
       pinBuf = ""; setTimeout(drawPin, 120);
     }
   }
@@ -1485,6 +1654,85 @@ function drawPin(){
     dots.appendChild(d);
   }
 }
+
+
+/* ---------- colour theme (per device, never synced) ----------
+   Auto follows the phone. Light and dark are explicit overrides that must
+   beat the prefers-color-scheme media query, which is why the CSS defines
+   :root[data-theme=...] blocks as well. */
+const THEME_KEY = "punchcard.theme";
+const THEME_ICON = {
+  auto:  '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>',
+  light: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>',
+  dark:  '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>'
+};
+const THEME_LABEL = { auto:"Theme: follows your phone", light:"Theme: light", dark:"Theme: dark" };
+let theme = "auto";
+
+function applyTheme(t){
+  theme = t;
+  if(t === "auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", t);
+  const btn = document.getElementById("themeBtn");
+  btn.innerHTML = THEME_ICON[t];
+  btn.title = THEME_LABEL[t];
+  btn.setAttribute("aria-label", THEME_LABEL[t]);
+  try{ localStorage.setItem(THEME_KEY, t); }catch(e){}
+}
+document.getElementById("themeBtn").onclick = () => {
+  applyTheme({ auto:"light", light:"dark", dark:"auto" }[theme]);
+};
+(function initTheme(){
+  let saved = "auto";
+  try{ saved = localStorage.getItem(THEME_KEY) || "auto"; }catch(e){}
+  applyTheme(["auto","light","dark"].includes(saved) ? saved : "auto");
+})();
+
+/* ---------- changing the PIN ---------- */
+const pinChangeScrim = document.getElementById("pinChangeScrim");
+const WEAK = /^(\d)\1{3}$/;                       // 0000, 1111, ...
+function isRun(p){                                 // 1234, 4321, 3456 ...
+  const d = p.split("").map(Number);
+  const up = d.every((n,i) => i === 0 || n === d[i-1] + 1);
+  const dn = d.every((n,i) => i === 0 || n === d[i-1] - 1);
+  return up || dn;
+}
+function openPinChange(){
+  ["pcOld","pcNew","pcNew2"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("pcErr").textContent = "";
+  pinChangeScrim.hidden = false;
+  document.getElementById("pcOld").focus();
+}
+document.getElementById("pinBtn").onclick = openPinChange;
+document.getElementById("pcCancel").onclick = () => { pinChangeScrim.hidden = true; };
+document.getElementById("pcSave").onclick = () => {
+  const err = document.getElementById("pcErr");
+  const old = document.getElementById("pcOld").value.replace(/\D/g,"");
+  const a   = document.getElementById("pcNew").value.replace(/\D/g,"");
+  const b   = document.getElementById("pcNew2").value.replace(/\D/g,"");
+  if(old !== state.pin)  return err.textContent = "That's not the current PIN.";
+  if(a.length !== 4)     return err.textContent = "The new PIN needs to be 4 digits.";
+  if(a !== b)            return err.textContent = "The two new PINs don't match.";
+  if(a === state.pin)    return err.textContent = "That's already your PIN.";
+  if(WEAK.test(a) || isRun(a))
+    return err.textContent = "Too easy to guess — avoid 1111 or runs like 1234.";
+  state.pin = a;
+  clearPinLock();
+  err.textContent = "";
+  pinChangeScrim.hidden = true;
+  save("config");
+};
+
+/* ---------- slow down a kid guessing the PIN ---------- */
+const LOCK_KEY = "punchcard.pinlock";
+const MAX_TRIES = 5, LOCK_MS = 60000;
+function pinLock(){
+  try{ return JSON.parse(localStorage.getItem(LOCK_KEY) || '{"fails":0,"until":0}'); }
+  catch(e){ return {fails:0, until:0}; }
+}
+function setPinLock(v){ try{ localStorage.setItem(LOCK_KEY, JSON.stringify(v)); }catch(e){} }
+function clearPinLock(){ setPinLock({fails:0, until:0}); }
+const lockedFor = () => Math.max(0, Math.ceil((pinLock().until - Date.now()) / 1000));
 
 /* ---------- confetti ---------- */
 function confetti(){
@@ -1527,7 +1775,8 @@ addEventListener("scroll", () => {
 }, {passive:true});
 addEventListener("keydown", e => {
   if(e.key !== "Escape") return;
-  if(!choreScrim.hidden) choreScrim.hidden = true;
+  if(!pinChangeScrim.hidden) pinChangeScrim.hidden = true;
+  else if(!choreScrim.hidden) choreScrim.hidden = true;
   else if(!pinScrim.hidden) pinScrim.hidden = true;
 });
 // roll the day over without a reload
