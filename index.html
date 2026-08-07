@@ -996,7 +996,16 @@ function authMessage(code){
     case "auth/user-disabled":          return "That account has been turned off.";
     case "auth/too-many-requests":      return "Too many tries. Wait a few minutes.";
     case "auth/network-request-failed": return "No connection. Check your internet.";
-    case "auth/operation-not-allowed":  return "Email sign-in isn't switched on in Firebase yet.";
+    case "auth/operation-not-allowed":  return "Email sign-in isn't switched on in Firebase yet (Step 3).";
+    case "auth/configuration-not-found":
+      return "Firebase Authentication hasn't been set up for this project yet. " +
+             "In the Firebase console: Build \u2192 Authentication \u2192 Get started, " +
+             "turn on Email/Password, then add your accounts. (Step 3.)";
+    case "auth/invalid-api-key":
+    case "auth/api-key-not-valid":      return "The Firebase config in this file isn't right.";
+    case "auth/unauthorized-domain":
+      return "This web address isn't authorised in Firebase. Console \u2192 Authentication " +
+             "\u2192 Settings \u2192 Authorised domains, and add it.";
     default:                            return "Couldn't sign in. Try again.";
   }
 }
