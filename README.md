@@ -37,14 +37,24 @@ Tap **Parent** (top right), enter the PIN, and you get four tabs:
 | **Money** | Balance owed, one-tap payout, and manual add/subtract with a reason. |
 | **Rules** | Streak rewards, milestone bonuses, deadline grace, late-pay policy, kid's name, PIN. |
 
-Tap the ◐ button in the top bar to switch **light / dark / follow-the-phone**.
-It's remembered per device, so the parent and the kid can each pick their own.
+### The top bar
+
+Three controls, right-hand side:
+
+| | | |
+| --- | --- | --- |
+| **◐** | light / dark / follow-the-phone | always visible, both modes |
+| **🔒** | change the PIN | parent mode only |
+| **Parent / Done** | switch modes | rightmost |
+
+The theme is remembered per device and isn't synced, so the parent and the kid
+can each pick their own.
 
 ### The PIN
 
-**Rules → Parent PIN → Change PIN.** It asks for the current PIN, then the new
+Tap the **🔒** button in the top bar. It asks for the current PIN, then the new
 one twice. Obvious PINs are refused — no `1111`, no runs like `1234` — and the
-app nags while it's still on the factory `1234`.
+button turns red while it's still on the factory `1234`.
 
 If someone gets it wrong 5 times the keypad locks for a minute, and the lockout
 survives closing the app, so guessing a 4-digit PIN is slow going. The PIN is
@@ -52,6 +62,9 @@ never shown on screen.
 
 The kid's screen shows their balance, a 7-day punch strip for the streak, and
 today's chores as tear-off stubs.
+
+The name is preset to **Christen Ariel** — change it any time in
+*Rules → Setup → Kid's name*. Nothing is lost when you do.
 
 ### How streaks work
 
