@@ -78,8 +78,39 @@ the accounts here, which is what keeps strangers out.
 4. Nickname it `chore-cart-web`
 5. **Leave "Also set up Firebase Hosting" unchecked**
 6. Click **Register app**
-7. Find the block starting `const firebaseConfig = {` and copy **everything from
-   the `{` to the `}`**, including both braces
+7. It now asks how you want to load the SDK: **"Use npm"** or **"Use a `<script>`
+   tag"**.
+
+   Choose **`<script>` tag**. The app already loads Firebase this way, and it
+   needs no npm and nothing installed. (Either option shows the same config, so
+   npm isn't *wrong* — script tag just matches what the app does.)
+
+8. You'll see a block like this:
+
+   ```html
+   <script type="module">
+     import { initializeApp } from "https://www.gstatic.com/firebasejs/…/firebase-app.js";
+
+     const firebaseConfig = {
+       apiKey: "AIzaSy…",
+       authDomain: "chore-cart.firebaseapp.com",
+       databaseURL: "https://chore-cart-default-rtdb.firebaseio.com",
+       projectId: "chore-cart",
+       storageBucket: "chore-cart.appspot.com",
+       messagingSenderId: "123456789012",
+       appId: "1:123…"
+     };
+
+     const app = initializeApp(firebaseConfig);
+   </script>
+   ```
+
+   **Copy only the braces part** — from the `{` after `firebaseConfig =` down to
+   its matching `}`, including both braces.
+
+   ⚠️ **Don't copy the rest.** Not the `<script>` tags, not the `import` line, not
+   `initializeApp`. The app already has all of that; pasting it in will break the
+   file.
 
 ✅ **Check it has a `databaseURL` line.** If it doesn't, you did this before step
 2. Create the Realtime Database, then copy the config again.
@@ -208,6 +239,30 @@ claims the family as parent.
 Now put the **same file** on the kid's phone and sign in with the *kid* account.
 Their phone should show the chore list with **no Parent button at all**. Tick
 something there, and it turns up in your Review tab awaiting approval.
+
+---
+
+## Step 8 — Change the PIN and pick a theme
+
+Two things to do once you're signed in, before the phone leaves your hands.
+
+**Change the PIN.** It ships as `1234`, which is the first thing anyone tries —
+the app will nag you until you change it.
+
+*Parent → Rules → Parent PIN → Change PIN.* It asks for the current PIN, then
+the new one twice.
+
+- Obvious codes are refused: no `1111`, no runs like `1234` or `4321`
+- Five wrong tries locks the keypad for a minute, and closing the app doesn't
+  reset it, so guessing four digits is slow work
+- The PIN is never displayed on screen
+
+The PIN guards the *parent screen*. Your database rules are what guard the
+*data* — a kid can't approve their own chores even if they learn the PIN.
+
+**Pick a theme.** The ◐ button in the top bar cycles light, dark, and
+follow-your-phone. It's stored per device, so you and your kid can each choose
+your own — it isn't part of the family data and doesn't sync.
 
 ---
 
