@@ -1,5 +1,5 @@
 {
-  "rules": {
+  "rules": { 
     "families": {
       "$fid": {
         ".read": "auth != null && ($fid === 'fam-219ncuyri2xossyhxr5lsynl') && (auth.uid === 'PARENT_UID' || auth.uid === 'KID_UID')",
