@@ -249,8 +249,8 @@ Two things to do once you're signed in, before the phone leaves your hands.
 **Change the PIN.** It ships as `1234`, which is the first thing anyone tries —
 the app will nag you until you change it.
 
-*Parent → Rules → Parent PIN → Change PIN.* It asks for the current PIN, then
-the new one twice.
+Tap the **🔒 button in the top bar** while in parent mode. It asks for the
+current PIN, then the new one twice. The button shows red until you change it.
 
 - Obvious codes are refused: no `1111`, no runs like `1234` or `4321`
 - Five wrong tries locks the keypad for a minute, and closing the app doesn't
@@ -260,8 +260,8 @@ the new one twice.
 The PIN guards the *parent screen*. Your database rules are what guard the
 *data* — a kid can't approve their own chores even if they learn the PIN.
 
-**Pick a theme.** The ◐ button in the top bar cycles light, dark, and
-follow-your-phone. It's stored per device, so you and your kid can each choose
+**Pick a theme.** The **◐ button** in the top bar cycles light, dark, and
+follow-your-phone. It's there in both parent and kid mode. It's stored per device, so you and your kid can each choose
 your own — it isn't part of the family data and doesn't sync.
 
 ---
